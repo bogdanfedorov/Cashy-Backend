@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id          String       @id @default(uuid()) @db.Char(36)
+  name        String
+  balance     Float        @default(0)
+  level       Int
+  score       Int
+  frameUrl    String
+  avatarUrl   String
+  background  String
+  backgrounds Background[]
+}
+
+model Background {
+  id                  String               @id @default(uuid()) @db.Char(36)
+  name                String
+  price               Float?
+  backgroundImageName String
+  status              BackgroundCardStatus
+  playerId            String?
+  player              Player?              @relation(fields: [playerId], references: [id])
+}
+
+enum BackgroundCardStatus {
+  Applied
+  Owned
+  CanBePurchased
+  EventOnly
+}
